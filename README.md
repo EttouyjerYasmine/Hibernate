@@ -1,19 +1,141 @@
-# Hibernate
-## Introduction
-L'objectif de ce TP est de configurer une application Java avec Hibernate et MySQL pour gérer la persistance des données. Chaque étape du TP est détaillée avec des explications pour faciliter la compréhension. La structure finale de ce projet est présenté dans la figure ci-dessous.
-<img width="214" height="377" alt="image" src="https://github.com/user-attachments/assets/f3d31aab-bbc8-42b5-849c-6c1696f4080b" />
+# 📋 Projet de Gestion des Machines et Salles
 
-## Structure du projet 
-<img width="493" height="378" alt="image" src="https://github.com/user-attachments/assets/95f7a9ef-8317-4ba2-ac47-a485405312a1" />
+## 📌 Aperçu du Projet
+Application Java utilisant **JPA/Hibernate** pour la gestion d'un parc de machines informatiques et de leurs salles d'affectation. Le système permet de suivre l'inventaire, les dates d'achat et la localisation des équipements.
 
-## Exécution du projet 
-<img width="607" height="306" alt="image" src="https://github.com/user-attachments/assets/e770eaef-e66b-4e6d-8d18-3aa237784ca3" />
-<img width="607" height="318" alt="image" src="https://github.com/user-attachments/assets/22fb9504-f1a1-4035-a56c-83246c053ece" />
-<img width="608" height="317" alt="image" src="https://github.com/user-attachments/assets/32e9965e-8ffd-4cd0-8b1d-1587826c43a6" />
+## 🏗️ Architecture des Entités
+
+### 🖥️ Entité `Machine`
+**Description** : Représente un équipement informatique (ordinateur, serveur, etc.)
+
+**Attributs** :
+- `id` : Identifiant unique auto-généré
+- `ref` : Référence unique de la machine
+- `dateAchat` : Date d'acquisition
+- `salle` : Relation vers la salle d'affectation
+
+**Requêtes disponibles** :
+- Recherche par plage de dates (JPQL)
+- Recherche par plage de dates (SQL natif)
+
+### 🏢 Entité `Salle`
+**Description** : Représente un espace physique hébergeant des machines
+
+**Attributs** :
+- `id` : Identifiant unique auto-généré
+- `code` : Code d'identification de la salle
+- `machines` : Liste des machines présentes
+
+## 🔄 Relations entre Entités
+
+```
+Une SALLE → Contient → Plusieurs MACHINES
+Une MACHINE → Est située dans → Une seule SALLE
+```
+
+**Type de relation** : Bidirectionnelle One-to-Many / Many-to-One
+
+## 🗄️ Structure de la Base de Données
+
+### Table `salles`
+| Colonne | Type | Description |
+|---------|------|-------------|
+| id | INT | Clé primaire auto-incrémentée |
+| code | VARCHAR | Code unique de la salle |
+
+### Table `machine`
+| Colonne | Type | Description |
+|---------|------|-------------|
+| id | INT | Clé primaire auto-incrémentée |
+| ref | VARCHAR | Référence de la machine |
+| date_achat | DATE | Date d'achat |
+| salle_id | INT | Clé étrangère vers salles(id) |
+
+## ⚙️ Configuration Technique
+
+**Technologies** :
+- Java Persistence API (JPA)
+- Hibernate ORM
+- Base de données relationnelle
+
+**Annotations JPA utilisées** :
+- `@Entity`, `@Id`, `@GeneratedValue`
+- `@ManyToOne`, `@OneToMany`
+- `@NamedQuery`, `@NamedNativeQuery`
+- `@Temporal`, `@Table`
+
+## 📊 Fonctionnalités Principales
+
+1. **Gestion des Machines**
+   - Création et suppression
+   - Recherche par période d'achat
+   - Affectation à une salle
+
+2. **Gestion des Salles**
+   - Création de nouveaux espaces
+   - Consultation du parc machine par salle
+   - Gestion des relations
+
+3. **Recherche et Filtrage**
+   - Recherche temporelle (machines achetées entre deux dates)
+   - Requêtes optimisées (JPQL et SQL natif)
+
+## 🎯 Cas d'Utilisation
+
+### Scénario typique :
+1. Ajouter une nouvelle salle ("LAB_INFORMATIQUE_3")
+2. Enregistrer de nouvelles machines avec leurs dates d'achat
+3. Affecter les machines à la salle créée
+4. Consulter le parc machine par période d'acquisition
+5. Exporter les données pour inventaire
+
+## 🔧 Prérequis d'Installation
+
+**Environnement requis** :
+- JDK 8 ou supérieur
+- Maven ou équivalent
+- Base de données compatible JPA (MySQL, PostgreSQL, etc.)
+- Serveur d'application avec support JPA
+
+**Dépendances principales** :
+- `javax.persistence-api`
+- `hibernate-core`
+- Driver de base de données
+
+## 📁 Structure du Projet
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── entities/
+│   │       ├── Machine.java
+│   │       └── Salle.java
+│   └── resources/
+│       └── META-INF/
+│           └── persistence.xml
+```
+
+## 💡 Bonnes Pratiques Implémentées
+
+✅ **Documentation complète** des entités  
+✅ **Requêtes nommées** pour les opérations fréquentes  
+✅ **Relations bi-directionnelles** correctement configurées  
+✅ **Stratégie de fetch** adaptée (EAGER pour les salles)  
+✅ **Gestion des dates** spécifique (DATE seulement)  
+
+## 🚀 Démonstration
+
+<img width="954" height="539" alt="Hibernate1" src="https://github.com/user-attachments/assets/68173eb4-6517-4f27-8955-7e7ec669ad9d" />
 
 
-## Auteur
-* Nom : BEN-LAGHFIRI Majeda
-* Cours: Architecture Microservices : Conception, Déploiement et Orchestration
-* Date : Janvier 2026
-* Encadré par : Pr.Mohamed LACHGAR
+<img width="959" height="539" alt="Hibernate2" src="https://github.com/user-attachments/assets/91f0bfda-7059-483b-813f-e64239ef4506" />
+
+
+<img width="959" height="539" alt="Hibernate4" src="https://github.com/user-attachments/assets/ec389726-e48c-440e-9f87-9c7a0a20914f" />
+
+**Auteurs** 
+
+Réalisé par : Ettouyjer yasmine.
+
+Encadré par : Pr.Mohamed Lechgar.
